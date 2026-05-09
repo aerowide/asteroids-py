@@ -1,11 +1,11 @@
 import pygame
 import sys
-from MODULES.logger import log_state, log_event
-from MODULES.constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from MODULES.PLAYER.player import Player
-from MODULES.PLAYER.shot import Shot
-from MODULES.ASTEROIDS.asteroid import Asteroid
-from MODULES.ASTEROIDS.asteroidfield import AsteroidField
+from logger import log_state, log_event
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from PLAYER.player import Player
+from PLAYER.shot import Shot
+from ASTEROIDS.asteroid import Asteroid
+from ASTEROIDS.asteroidfield import AsteroidField
 
 def main():
     # --- initialize pygame
