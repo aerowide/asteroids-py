@@ -27,7 +27,7 @@ def main():
     # -- init player and it's bullets
     Player.containers = (updatable, drawable)
     Shot.containers = (shots, updatable, drawable)
-    player = Player(SCREEN_WIDTH//3, SCREEN_HEIGHT//2)
+    player = Player(SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
     
     # -- init asteroids
     Asteroid.containers = (asteroids, updatable, drawable)
