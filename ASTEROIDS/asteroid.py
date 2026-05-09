@@ -1,5 +1,6 @@
 import pygame
 import random
+from base64 import b64encode
 from constants import *
 from logger import log_event
 from circleshape import CircleShape
@@ -9,17 +10,23 @@ class Asteroid(CircleShape):
         super().__init__(x, y, radius)
 
     def draw(self, screen):
+        a_size = (self.radius // ASTEROID_MIN_RADIUS) # asteroid size
+        circle_surface = pygame.Surface((self.radius * 2, self.radius * 2), pygame.SRCALPHA)
         pygame.draw.circle(
-                screen,
-                "white",
-                self.position,
+                circle_surface,
+                pygame.Color(55, 55, 255, 155 // a_size),
+                (self.radius, self.radius),
                 self.radius,
-                LINE_WIDTH
+                LINE_WIDTH * ((a_size*2) - 1) # aka. 1, 3, 5 ....
             )
+        draw_pos = (self.position.x - self.radius, self.position.y - self.radius)
+        screen.blit(circle_surface, draw_pos)
     def update(self, dt):
         self.position += (self.velocity * dt)
     
     def split(self):
+        print(f"=x Asteroid {hex(id(self))[-5:]} hit!") # it's a mess, i know
+
         if self.radius <= ASTEROID_MIN_RADIUS:
             self.kill()
             return
@@ -47,5 +54,4 @@ class Asteroid(CircleShape):
 
             child_asteroid_1.velocity = c_asteroid_vec1
             child_asteroid_2.velocity = c_asteroid_vec2
-
             
