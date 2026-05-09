@@ -8,27 +8,40 @@ from circleshape import CircleShape
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
+        self.exploding = False
+        self.explode_timer = 0
+
 
     def draw(self, screen):
         a_size = (self.radius // ASTEROID_MIN_RADIUS) # asteroid size
         circle_surface = pygame.Surface((self.radius * 2, self.radius * 2), pygame.SRCALPHA)
+        
+        draw_width = 0 if self.exploding else LINE_WIDTH * a_size
+        
         pygame.draw.circle(
                 circle_surface,
                 pygame.Color(55, 55, 255, 155 // a_size),
                 (self.radius, self.radius),
                 self.radius,
-                LINE_WIDTH * ((a_size*2) - 1) # aka. 1, 3, 5 ....
+                draw_width
             )
         draw_pos = (self.position.x - self.radius, self.position.y - self.radius)
         screen.blit(circle_surface, draw_pos)
     def update(self, dt):
+        if self.exploding:
+            self.explosion_timer -= dt
+            if self.explosion_timer <= 0: self.kill()
+            return
         self.position += (self.velocity * dt)
     
-    def split(self):
+    def split(self, clock, dt):
         print(f"=x Asteroid {hex(id(self))[-5:]} hit!") # it's a mess, i know
 
+        if not self.exploding:
+            self.exploding = True
+            self.explosion_timer = 0.11
+
         if self.radius <= ASTEROID_MIN_RADIUS:
-            self.kill()
             return
         else:
             log_event("asteroid_split")
@@ -37,7 +50,6 @@ class Asteroid(CircleShape):
             angle = random.uniform(20, 50)
             velocity = self.velocity.copy()
             position = self.position.copy()
-            self.kill()
             
             # % calculate vectors and radius for both child asteroids
 
